@@ -1,0 +1,150 @@
+/* Global styles */
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* to cover full height of the viewport */
+  }
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Login page styles */
+  .login-container {
+    width: 500px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .login-container h1 {
+    margin-bottom: 20px;
+  }
+  
+  .login-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .login-container label {
+    margin-top: 10px;
+  }
+  
+  .login-container input {
+    padding: 10px;
+    margin-top: 5px;
+  }
+  
+  .login-container button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Signup page styles */
+  .signup-container {
+    width: 500px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .signup-container h1 {
+    margin-bottom: 20px;
+  }
+  
+  .signup-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .signup-container label {
+    margin-top: 10px;
+  }
+  
+  .signup-container input {
+    padding: 10px;
+    margin-top: 5px;
+  }
+  
+  .signup-container button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Index page styles */
+  
+  .chat-container {
+    width: 500px;
+    margin: 0 auto;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 20px;
+  }
+  
+  .chat-header {
+    text-align: center;
+  }
+  
+  .chat-messages {
+    height: 300px;
+    overflow-y: scroll;
+  }
+  
+  .message-container {
+    margin-bottom: 10px;
+  }
+
+  .message-container:nth-child(odd) {
+    text-align: left;
+  }
+  
+  .message-container:nth-child(even) {
+    text-align: right;
+  }
+  
+  .message-username {
+    font-weight: bold;
+  }
+  
+  .chat-input {
+    display: flex;
+    align-items: center;
+  }
+  
+  textarea {
+    flex-grow: 1;
+    padding: 10px;
+    margin-right: 10px;
+  }
+  
+/* Styles for screens larger than 600px */
+@media (min-width: 600px) {
+  .login-container, .signup-container, .chat-container {
+    width: 700px;
+  }
+}
+
+/* Styles for screens smaller than 600px */
+@media (max-width: 600px) {
+  .login-container, .signup-container, .chat-container {
+    width: 300px;
+  }
+}
+
+.login-container, .signup-container, .chat-container {
+  width: 80%;
+}
+
