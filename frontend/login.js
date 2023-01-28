@@ -10,7 +10,8 @@ function logInfunc(e){
 
 async function dataFetch(logInData){
     try{
-        console.log(logInData)
+        const userLoginData = await axios.post('http://localhost:3000/user/login',logInData)
+        console.log(userLoginData)
     }
     catch(err){
         console.log(err)
