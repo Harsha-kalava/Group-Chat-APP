@@ -11,7 +11,11 @@ const User = require('./backend/models/user')
 const userRoutes = require('./backend/routes/user')
 
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin: '*',
+    credentials: true
+}))
+
 app.use(bodyParser.json())
 
 app.use("/user",userRoutes)

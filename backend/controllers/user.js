@@ -11,6 +11,13 @@ exports.addUser = async(req,res)=>{
         const password = userData.password
         const number = userData.mobilenum
         const email = userData.email
+
+        const checker = await User.findOne({where:{email:email}})
+
+        if(checker){
+            return res.status(503).json({success:false,message:'User already present in the data'})
+        }
+
         bcrypt.hash(password,10,async(err,hash)=>{
             try{
                await User.create({

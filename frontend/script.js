@@ -22,9 +22,16 @@ async function storeSignupData(userData){
             para.appendChild(textNode);
             parentElement.appendChild(para)
         }
+        alert("Successfuly signed up")
     }
     catch(err){
-        console.log(err)
+        const parentElement = document.getElementById('message-container')
+        if(err.response.status === 503){
+            const para = document.createElement("p");
+            const textNode = document.createTextNode("User already exists");
+            para.appendChild(textNode);
+            parentElement.appendChild(para)
+        }
     }
    
 }
