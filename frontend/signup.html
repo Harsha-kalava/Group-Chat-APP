@@ -11,7 +11,7 @@
     <div class="signup-container">
         <h1>Welcome to Group-Chat Application</h1>
         <h2>Signup to continue</h2>
-        <form>
+        <form onsubmit="userDetails(event)">
           <label for="username">Username</label>
           <input type="text" id="username" name="username">
           <label for="email">Email:</label>
@@ -22,6 +22,11 @@
           <input type="mobile-number" id="number" name="number">
           <button type="submit">Sign Up</button>
         </form>
-      </div>      
+        <div id="message-container">
+          
+        </div>
+      </div> 
+      <script src="script.js"></script>    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.5/axios.min.js" integrity="sha512-JEXkqJItqNp0+qvX53ETuwTLoz/r1Tn5yTRnZWWz0ghMKM2WFCEYLdQnsdcYnryMNANMAnxNcBa/dN7wQtESdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
 </body>
 </html>
