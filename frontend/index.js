@@ -3,7 +3,9 @@ document.addEventListener('DOMContentLoaded', async()=>{
     try{
         const userName = localStorage.getItem('username')
         userJoined(userName)
-        showMsgs()
+        setInterval(()=>{
+            showMsgs()
+        },1000)
     }
     catch(err){
         console.log(err)
@@ -22,7 +24,6 @@ function userJoined(userName){
 
 async function chatButton(){
     try{
-
         const token = localStorage.getItem('token')
 
         let textArea = document.querySelector("textarea");
@@ -47,12 +48,12 @@ async function chatButton(){
 
 async function showMsgs(){
     try{
+        document.getElementById('chatblock').innerHTML = ''
         const allMsgsRes = await axios.get('http://localhost:3000/msg/toget')
         // console.log(allMsgsRes.data.message)
         const allMsgs = allMsgsRes.data.message
         const user = localStorage.getItem('username')
         allMsgs.forEach(data => {
-
             let msgText = data.message
             let userName = data.user.name
             console.log(msgText,userName)
