@@ -113,7 +113,16 @@ body {
   } */
   
   .message-container{
+    text-align: center;
+  }
+  .message-container-right{
     text-align: right;
+    font-size: 1.2rem;
+  }
+
+  .message-container-left{
+    text-align: left;
+    font-size: 1.2rem;
   }
   
   .message-username {

@@ -7,4 +7,6 @@ const authenticateMiddleware = require('../middleware/auth')
 
 router.post('/tostore',authenticateMiddleware.authenticate,msgController.addMsg)
 
+router.get('/toget',msgController.getMsg)
+
 module.exports = router

@@ -1,4 +1,5 @@
 const Msg = require('../models/message')
+const User = require('../models/user')
 
 exports.addMsg = async (req,res)=>{
     try{
@@ -14,5 +15,18 @@ exports.addMsg = async (req,res)=>{
     catch(err){
         console.log(err)
         return res.status(400).json({succes:false,message:'unable to store msg in database'})
+    }
+}
+
+exports.getMsg = async(req,res)=>{
+    try{
+        const allMsgs = await Msg.findAll(
+            {attributes: ['message'],
+            include:[{model:User,attributes:['name']}]})
+        return res.status(200).json({message:allMsgs})
+    }
+    catch(err){
+        console.log(err)
+        return res.status(401).json({msg:'failed at get msg controller '})
     }
 }
