@@ -55,7 +55,7 @@ exports.userLogin = async (req,res)=>{
         if(!userPwCheck){
             return res.status(401).json({success:false,message:'wrong password'})
         }
-        return res.status(200).json({success:true,message:'user logged in successful',token:generateAccessToken(usercheck.id)})
+        return res.status(200).json({success:true,message:'user logged in successful',data:usercheck,token:generateAccessToken(usercheck.id)})
     }
     catch(err){
         console.log(err)

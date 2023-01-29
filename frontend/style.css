@@ -99,19 +99,20 @@ body {
   }
   
   .chat-messages {
-    height: 300px;
+    height: 80vh;
     overflow-y: scroll;
+
   }
   
   .message-container {
     margin-bottom: 10px;
   }
 
-  .message-container:nth-child(odd) {
+  /* .message-container:nth-child(odd) {
     text-align: left;
-  }
+  } */
   
-  .message-container:nth-child(even) {
+  .message-container{
     text-align: right;
   }
   
@@ -146,5 +147,6 @@ body {
 
 .login-container, .signup-container, .chat-container {
   width: 80%;
+  /* height: 100vh; */
 }
 
