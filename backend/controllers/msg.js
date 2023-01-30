@@ -30,3 +30,27 @@ exports.getMsg = async(req,res)=>{
         return res.status(401).json({msg:'failed at get msg controller '})
     }
 }
+
+exports.getMsgOnLimit = async(req,res)=>{
+    try{
+        const msgSkipNum = Number(req.query.id)
+        console.log(msgSkipNum)
+        if(msgSkipNum >= 10){
+            const skip = msgSkipNum-10
+            let offset = skip
+            const allMsgs = await Msg.findAll(
+                {attributes: ['id','message'],offset:offset,
+                include:[{model:User,attributes:['name']}]})
+            return res.status(200).json({message:allMsgs})
+
+        }
+        const allMsgs = await Msg.findAll(
+            {attributes: ['id','message'],
+            include:[{model:User,attributes:['name']}]})
+        return res.status(200).json({message:allMsgs})
+    }
+    catch(err){
+        console.log(err)
+        return res.status(401).json({message:'something went wrong'})
+    }
+}

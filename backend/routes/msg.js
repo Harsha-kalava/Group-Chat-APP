@@ -9,4 +9,6 @@ router.post('/tostore',authenticateMiddleware.authenticate,msgController.addMsg)
 
 router.get('/toget',msgController.getMsg)
 
+router.get('/localmsg',msgController.getMsgOnLimit)
+
 module.exports = router
