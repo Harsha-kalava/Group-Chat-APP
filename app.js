@@ -7,10 +7,12 @@ dotenv.config()
 const sequelize = require('./backend/util/database')
 const User = require('./backend/models/user')
 const Msg = require('./backend/models/message')
+const Group = require('./backend/models/group')
 
 
 const userRoutes = require('./backend/routes/user')
 const msgRoutes = require('./backend/routes/msg')
+const groupRoutes = require('./backend/routes/group')
 
 const app = express()
 app.use(cors({
@@ -22,9 +24,17 @@ app.use(bodyParser.json())
 
 app.use("/user",userRoutes)
 app.use("/msg",msgRoutes)
+app.use('/group',groupRoutes)
+
 
 User.hasMany(Msg)
 Msg.belongsTo(User)
+
+Group.hasMany(Msg)
+Msg.belongsTo(Group)
+
+User.belongsToMany(Group,{through:'usergroup'})
+Group.belongsToMany(User,{through:'usergroup'})
 
 sequelize.sync({alter:true})
 .then((res)=>{
@@ -32,3 +42,4 @@ sequelize.sync({alter:true})
         console.log('app started running')
     })
 })
+

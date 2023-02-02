@@ -96,11 +96,18 @@ body {
   
   .chat-header {
     text-align: center;
+    border: 1px solid rgb(110, 107, 107);
+  }
+
+  .chat-headers {
+    text-align: center;
+    border-bottom: 1px solid #ccc;
   }
   
   .chat-messages {
     height: 60vh;
     overflow-y: scroll;
+    /* margin-right: 5%; */
 
   }
   
@@ -118,6 +125,7 @@ body {
   .message-container-right{
     text-align: right;
     font-size: 1.2rem;
+    margin-right: 2%;
   }
 
   .message-container-left{
@@ -138,6 +146,51 @@ body {
     flex-grow: 1;
     padding: 10px;
     margin-right: 10px;
+  }
+  
+  .side-section {
+    width: 20%;
+    float: left;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    height: 100%;
+  }
+  
+  .group-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    /* margin-left: 5%; */  }
+
+  .group-list li {
+    margin-bottom: 10px;
+  }
+  
+  .create-group-btn {
+    display: block;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* .create-group-btn {
+    display: block;
+    width: 30%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    margin-top: 20px;
+    cursor: pointer;
+  } */
+  
+  .create-group-btn:hover {
+    background-color: #3e8e41;
   }
   
 /* Styles for screens larger than 600px */

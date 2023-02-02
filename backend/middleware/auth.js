@@ -3,6 +3,7 @@ const User = require('../models/user')
 
 exports.authenticate = async(req,res,next)=>{
     try{
+        console.log('reached to middleware')
         const token = req.header('Authorization')
         if (!token) {
             return res.status(401).json({success:false, message: 'No token provided'})
