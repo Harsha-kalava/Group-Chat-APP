@@ -14,18 +14,22 @@
           <h1>Group Chat APP</h1>
         </div>
          <div class="side-section">
+          <div>
+            <button id="public" onclick="switchGroup(0)">Common Room</button>
+          </div>
     <h2>Your Groups</h2>
     <ul class="group-list" id="group-list">
-      <li><a href="#group1">Group 1</a></li>
+      
+      <!-- <li><a href="#group1">Group 1</a></li>
       <li><a href="#group2">Group 2</a></li>
-      <li><a href="#group3">Group 3</a></li>
+      <li><a href="#group3">Group 3</a></li> -->
     </ul>
     <button class="create-group-btn" onclick="createGroup()">Create Group</button>
   </div>
   <div class="chat-headers">
-    <h3>New Group</h3>
+    <h3 id="gorupNameHeader">Common Room</h3>
   </div>
-        <div class="chat-messages" id="chatblock">
+        <div class="chat-messages" id="chatblock"> 
           <!-- <div class="message-container">
             <p class="message-username">User 1:</p>
             <p class="message-text">Hello, everyone!</p>
@@ -41,8 +45,9 @@
           <button onclick="getAll()">All Messages</button>
         </div>
       </div>
-      <script src="index.js"></script>
+      
       <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.5/axios.min.js" integrity="sha512-JEXkqJItqNp0+qvX53ETuwTLoz/r1Tn5yTRnZWWz0ghMKM2WFCEYLdQnsdcYnryMNANMAnxNcBa/dN7wQtESdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+      <script src="index.js"></script>
   </body>
   
 </html>

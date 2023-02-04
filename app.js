@@ -8,6 +8,7 @@ const sequelize = require('./backend/util/database')
 const User = require('./backend/models/user')
 const Msg = require('./backend/models/message')
 const Group = require('./backend/models/group')
+const userGroupData = require('./backend/models/usergroup')
 
 
 const userRoutes = require('./backend/routes/user')
@@ -33,8 +34,8 @@ Msg.belongsTo(User)
 Group.hasMany(Msg)
 Msg.belongsTo(Group)
 
-User.belongsToMany(Group,{through:'usergroup'})
-Group.belongsToMany(User,{through:'usergroup'})
+User.belongsToMany(Group,{through:userGroupData})
+Group.belongsToMany(User,{through:userGroupData})
 
 sequelize.sync({alter:true})
 .then((res)=>{

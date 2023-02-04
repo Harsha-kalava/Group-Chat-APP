@@ -157,6 +157,14 @@ body {
     height: 100%;
   }
   
+  #public{
+    padding: 10px;
+    background-color: lightslategray;
+    border-radius: 10px;
+    border-color: rgb(151, 145, 145);
+    cursor: pointer;
+    font-size: 1.2rem;
+  }
   .group-list {
     list-style: none;
     padding: 0;
@@ -165,6 +173,26 @@ body {
 
   .group-list li {
     margin-bottom: 10px;
+  }
+
+  .group-text {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #000000;
+    background-color: #8c93cf;
+    transition: background-color 0.3s ease;
+    font-size: 1.2rem;
+  }
+  
+  .group-text:hover {
+    background-color: #706c6c;
+  }
+  
+  .invite{
+    margin-left: 2%;
   }
   
   .create-group-btn {

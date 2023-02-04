@@ -5,7 +5,7 @@ const router = express.Router()
 const msgController = require('../controllers/msg')
 const authenticateMiddleware = require('../middleware/auth')
 
-router.post('/tostore',authenticateMiddleware.authenticate,msgController.addMsg)
+router.post('/tostore/:id',authenticateMiddleware.authenticate,msgController.addMsg)
 
 router.get('/toget',msgController.getMsg)
 

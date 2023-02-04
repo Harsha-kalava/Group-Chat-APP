@@ -1,4 +1,4 @@
-
+localStorage.clear()
 
 function logInfunc(e){
     e.preventDefault()

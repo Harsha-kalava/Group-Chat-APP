@@ -5,6 +5,10 @@ const router = express.Router()
 const grpController = require('../controllers/group')
 const authenticateMiddleware = require('../middleware/auth')
 
-router.post('/toCreate',grpController.groupCreation)
+router.post('/toCreate',authenticateMiddleware.authenticate,grpController.groupCreation)
+
+router.get('/allgroups',authenticateMiddleware.authenticate,grpController.allGroups)
+
+router.get('/groupid/:id',authenticateMiddleware.authenticate,grpController.groupCheckAndFetch)
 
 module.exports = router
