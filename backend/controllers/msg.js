@@ -1,19 +1,22 @@
 
 const Msg = require('../models/message')
 const User = require('../models/user')
+const Group = require('../models/group')
 
 exports.addMsg = async (req,res)=>{
     try{
         const userId = req.user.id
         const {msg} = req.body
-        const groupId = req.params.id
+        const groupId = Number(req.params.id)
         console.log(req.params.id,'group id here -->')
         console.log(msg,userId)
-        await Msg.create({
+        
+        const result = await Msg.create({
             message:msg,
             userId:userId,
             groupId:groupId
         })
+        console.log(result)
         return res.status(201).json({succes:true,message:'msg stored in database successfully'})
     }
     catch(err){

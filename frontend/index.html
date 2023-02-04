@@ -15,7 +15,7 @@
         </div>
          <div class="side-section">
           <div>
-            <button id="public" onclick="switchGroup(0)">Common Room</button>
+            <button id="public" onclick="switchGroup(1)">Common Room</button>
           </div>
     <h2>Your Groups</h2>
     <ul class="group-list" id="group-list">
@@ -26,6 +26,14 @@
     </ul>
     <button class="create-group-btn" onclick="createGroup()">Create Group</button>
   </div>
+  <!-- <div class="side-section">
+    <h2>Users</h2>
+    <ul class="user-list" id="user-list">
+         <li>User 1</li>
+            <li>User 2</li>
+            <li>User 3</li>
+    </ul>
+  </div> -->
   <div class="chat-headers">
     <h3 id="gorupNameHeader">Common Room</h3>
   </div>
@@ -44,6 +52,10 @@
           <button onclick="chatButton(event)">Send</button>
           <button onclick="getAll()">All Messages</button>
         </div>
+      </div>
+      <div id="invite-link-section" style="display: none">
+        <p>Invite Link: <span id="group-invite-link"></span></p>
+        <button id="copy-invite-link-btn">Copy Link</button>
       </div>
       
       <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.5/axios.min.js" integrity="sha512-JEXkqJItqNp0+qvX53ETuwTLoz/r1Tn5yTRnZWWz0ghMKM2WFCEYLdQnsdcYnryMNANMAnxNcBa/dN7wQtESdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 

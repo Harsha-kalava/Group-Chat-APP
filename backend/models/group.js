@@ -12,8 +12,9 @@ const GroupData = sequelize.define('group',{
     },
     GroupName:{
         type:Sequelize.STRING,
-        allowNull:false
+        allowNull:false,
     },
 })
+
 
 module.exports = GroupData

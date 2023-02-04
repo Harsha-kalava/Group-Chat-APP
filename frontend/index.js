@@ -61,7 +61,7 @@ async function chatButton() {
 
     const groupId = localStorage.getItem("groupId")
     ? localStorage.getItem("groupId")
-    :0
+    :1
 
     await axios.post(
       `http://localhost:3000/msg/tostore/${groupId}`,
@@ -227,10 +227,11 @@ li.appendChild(groupText);
 parentElement.appendChild(li)
     
 
-let inviteLink = document.createElement("a")
-inviteLink.href = `/join?groupId=${item.id}`
+let inviteLink = document.createElement("p")
+inviteLink.innerHTML = `<a href="http://localhost:3000/group/groupid/${item.id}">Invite</a>`
 inviteLink.className = 'invite'
-inviteLink.textContent = "Invite"
+// inviteLink.textContent = "Invite"
+inviteLink.addEventListener('click',()=> linkClicked(item.id,item.GroupName))
 li.appendChild(inviteLink)
 
 parentElement.appendChild(li)
@@ -242,11 +243,11 @@ parentElement.appendChild(li)
 async function linkClicked(id) {
   try {
     console.log("clicked on the group link", id);
-    const newGroupRes = await axios.get(`http://localhost:3000/group/groupid/${id}`);
-    if(newGroupRes.status === 201){
+    // const newGroupRes = await axios.get(`http://localhost:3000/group/groupid/${id}`);
+    // if(newGroupRes.status === 201){
       
-      window.location = 'login.html'
-    }
+    //   window.location = 'login.html'
+    // }
   } catch (err) {
     console.log(err);
   }

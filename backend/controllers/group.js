@@ -8,6 +8,13 @@ exports.groupCreation = async(req,res)=>{
         const userId = req.user.id
         console.log(data.groupName)
 
+        const addCommonGroup = await Group.findOrCreate({
+            where: { GroupName: 'common' }   
+        }).then((result) => {
+            return result;
+          })
+          console.log(addCommonGroup)
+
         const groupTable = await Group.create({
             GroupName:data.groupName,
             userId:userId
@@ -43,6 +50,7 @@ exports.allGroups = async(req,res)=>{
         console.log(err)
     }
 }
+
 
 exports.groupCheckAndFetch = async(req,res)=>{
     try{
