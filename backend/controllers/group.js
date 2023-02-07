@@ -63,3 +63,24 @@ exports.groupCheckAndFetch = async(req,res)=>{
         console.log(err)
     }
 }
+
+exports.addUserToGroup = async (req,res)=>{
+    try{
+        const groupId = req.query.groupId
+        const userId = req.user.id
+        console.log(groupId,userId)
+        const userInGroupOrNot = await userGroup.findOne({where:{groupId:groupId,userId:userId}})
+        if(!userInGroupOrNot){
+            await userGroup.create({
+                userId:userId,
+                groupId:groupId
+            })
+            return res.status(201).json({success:true,message:'user created'})
+        }
+        
+        return res.status(200).json({success:true,message:'user already created'})
+    }
+    catch(err){
+        console.log(err)
+    }
+}

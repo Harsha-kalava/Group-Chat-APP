@@ -40,9 +40,10 @@ exports.getMsg = async(req,res)=>{
 
 exports.getMsgOnLimit = async(req,res)=>{
     try{
+        console.log('called called')
         const groupId = req.query.groupId
         const msgSkipNum = Number(req.query.id)
-        console.log(msgSkipNum)
+        console.log(msgSkipNum,'to skip')
         if(msgSkipNum >= 10){
             const skip = msgSkipNum-10
             let offset = skip

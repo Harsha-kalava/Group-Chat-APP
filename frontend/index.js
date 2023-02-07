@@ -103,13 +103,13 @@ async function getLocalMsgs() {
       let preData = JSON.parse(localStorage.getItem("data")) || [];
       let groupId = localStorage.getItem("groupId")
       ? localStorage.getItem("groupId")
-      : 0
+      : 1
 
       let lastMsgId;
 
       if (preData.length !== 0) {
         lastMsgId = preData[preData.length - 1].id;
-        // console.log(lastMsgId)
+        console.log(lastMsgId,'lastmsg ID')
       } else {
         lastMsgId = -1;
       }
@@ -117,15 +117,16 @@ async function getLocalMsgs() {
       const LocalMsgsRes = await axios.get(
         `http://localhost:3000/msg/localmsg?id=${lastMsgId}&groupId=${groupId}`
       );
-      // console.log(LocalMsgsRes.data.message,'local')
+      console.log(LocalMsgsRes.data.message,'local')
 
       let sameData = LocalMsgsRes.data.message;
 
       if (
-        preData.length !== 0 &&
-        preData[preData.length - 1].id === sameData[sameData.length - 1].id
+        (preData.length !== 0 ) &&  (sameData.length !== 0) &&
+        (preData[preData.length - 1].id === sameData[sameData.length - 1].id) 
       ) {
         console.log(
+
           preData[preData.length - 1].id - 1,
           sameData[sameData.length - 1].id,
           preData.length,
@@ -192,6 +193,7 @@ async function showMsgs(allMsgs) {
         if (msgText.startsWith("http://localhost:3000/group/groupid/")) {
           const url = msgText;
           const lastSlashIndex = url.lastIndexOf('/');
+          console.log(lastSlashIndex)
           const groupId = url.substring(lastSlashIndex + 1);
           messageText.innerHTML = `${userName}:  <a href="#" onclick="linkClicked(${groupId})">Join link</a>`;
         } else {
@@ -267,7 +269,14 @@ function groupUI(data) {
 
 async function linkClicked(id) {
   try {
-    console.log("clicked on the group link", id);
+    console.log("clicked on the group link", id)
+    alert('Are you sure to join in this group')
+    const userCheckInGroupRes = await axios.get(`http://localhost:3000/group/toadduser?groupId=${id}`)
+    console.log(userCheckInGroupRes.status)
+    if(userCheckInGroupRes.status === 200){
+      alert('You are already a member in this group')
+    }
+    alert('Successfully joined in this gorup')
   } catch (err) {
     console.log(err);
   }

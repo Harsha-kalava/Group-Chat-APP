@@ -11,4 +11,6 @@ router.get('/allgroups',authenticateMiddleware.authenticate,grpController.allGro
 
 router.get('/groupid/:id',authenticateMiddleware.authenticate,grpController.groupCheckAndFetch)
 
+router.get('/toadduser',authenticateMiddleware.authenticate,grpController.addUserToGroup)
+
 module.exports = router
