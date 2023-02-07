@@ -39,6 +39,7 @@ Group.belongsToMany(User,{through:userGroupData})
 
 
 
+
 sequelize.sync({alter:true})
 .then((res)=>{
     app.listen(process.env.PORT||3000,()=>{

@@ -192,7 +192,8 @@ body {
   }
   
   .invite{
-    margin-left: 2%;
+    margin-top: -1.5rem;
+    margin-left: 4.5rem;
   }
   
   .create-group-btn {
@@ -205,6 +206,7 @@ body {
     border-radius: 5px;
     cursor: pointer;
   }
+  
 
   /* .create-group-btn {
     display: block;
