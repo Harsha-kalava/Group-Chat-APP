@@ -16,13 +16,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const userName = localStorage.getItem("username");
     userJoined(userName);
-    // if(!getAllClicked){
-    //     setInterval(()=>{
-    //         getLocalMsgs()
+    if(!getAllClicked){
+        setInterval(()=>{
+            getLocalMsgs()
 
-    //     },1000)
-    // }
-    getLocalMsgs()
+        },1000)
+    }
+    // getLocalMsgs()
     allGroups();
   } catch (err) {
     console.log(err);
@@ -88,7 +88,8 @@ async function chatButton() {
 async function getAll() {
   try {
     getAllClicked = true;
-    const allMsgsRes = await axios.get("http://localhost:3000/msg/toget");
+    const groupId = localStorage.getItem('groupId')
+    const allMsgsRes = await axios.get(`http://localhost:3000/msg/toget/${groupId}`);
     // console.log(allMsgsRes.data.message)
     const allMsgs = allMsgsRes.data.message;
     showMsgs(allMsgs);
@@ -97,83 +98,114 @@ async function getAll() {
   }
 }
 
+let latestMessageId = localStorage.getItem("latestMessageId") || 0;
+
 async function getLocalMsgs() {
   if (!getAllClicked) {
-    try {
-      let preData = JSON.parse(localStorage.getItem("data")) || [];
-      let groupId = localStorage.getItem("groupId")
-      ? localStorage.getItem("groupId")
-      : 1
+    let groupId = localStorage.getItem("groupId");
+    const LocalMsgsRes = await axios.get(
+      `http://localhost:3000/msg/localmsg?groupId=${groupId}&latestId=${latestMessageId}`
+    );
+    console.log(LocalMsgsRes.data.message, "local");
+    let messages = LocalMsgsRes.data.message;
+    let currentMessages = JSON.parse(localStorage.getItem("messages")) || [];
 
-      let lastMsgId;
-
-      if (preData.length !== 0) {
-        lastMsgId = preData[preData.length - 1].id;
-        console.log(lastMsgId,'lastmsg ID')
-      } else {
-        lastMsgId = -1;
+    // Only add new messages to the currentMessages array
+    for (let i = 0; i < messages.length; i++) {
+      if (messages[i].id > latestMessageId) {
+        currentMessages.push(messages[i]);
+        latestMessageId = messages[i].id;
       }
-
-      const LocalMsgsRes = await axios.get(
-        `http://localhost:3000/msg/localmsg?id=${lastMsgId}&groupId=${groupId}`
-      );
-      console.log(LocalMsgsRes.data.message,'local')
-
-      let sameData = LocalMsgsRes.data.message;
-
-      if (
-        (preData.length !== 0 ) &&  (sameData.length !== 0) &&
-        (preData[preData.length - 1].id === sameData[sameData.length - 1].id) 
-      ) {
-        console.log(
-
-          preData[preData.length - 1].id - 1,
-          sameData[sameData.length - 1].id,
-          preData.length,
-          sameData.length
-        )
-        let datalocal = JSON.parse(localStorage.getItem("data"));
-        return showMsgs(datalocal);
-      }
-      let allLocalMsgs;
-
-      if (preData.length === 0) {
-        allLocalMsgs = LocalMsgsRes.data.message;
-      } else {
-        allLocalMsgs = [...preData, ...LocalMsgsRes.data.message];
-        let uniqueIds = new Set();
-        allLocalMsgs = allLocalMsgs.filter((item) => {
-          if (!uniqueIds.has(item.id)) {
-            uniqueIds.add(item.id);
-            return true;
-          }
-          return false;
-        });
-
-        // console.log(allLocalMsgs);
-      }
-
-      if (allLocalMsgs.length > 10) {
-        console.log(allLocalMsgs);
-        const msgAfterSlice = allLocalMsgs.slice(
-          allLocalMsgs.length - 10,
-          allLocalMsgs.length
-        );
-        console.log(allLocalMsgs.length, "after slice");
-        localStorage.setItem("data", JSON.stringify(msgAfterSlice));
-      } else {
-        localStorage.setItem("data", JSON.stringify(allLocalMsgs));
-        // console.log("entered 2");
-      }
-
-      let datalocal = JSON.parse(localStorage.getItem("data"));
-      //   console.log(datalocal)
-      showMsgs(datalocal);
-    } catch (err) {
-      console.log(err, "happend in frontend");
     }
+
+    currentMessages = currentMessages.slice(-10);
+    localStorage.setItem("messages", JSON.stringify(currentMessages));
+    let info = JSON.parse(localStorage.getItem("messages"));
+    console.log(info, "info");
+    showMsgs(info);
   }
 }
+
+
+
+
+
+// async function getLocalMsgs() {
+//   if (!getAllClicked) {
+//     try {
+//       let preData = JSON.parse(localStorage.getItem("data")) || [];
+//       let groupId = localStorage.getItem("groupId")
+
+
+//       let lastMsgId;
+
+//       if (preData.length !== 0) {
+//         lastMsgId = preData[preData.length - 1].id;
+//         console.log(lastMsgId,'lastmsg ID')
+//       } else {
+//         lastMsgId = -1;
+//       }
+
+//       const LocalMsgsRes = await axios.get(
+//         `http://localhost:3000/msg/localmsg?id=${lastMsgId}&groupId=${groupId}`
+//       );
+//       console.log(LocalMsgsRes.data.message,'local')
+
+//       let sameData = LocalMsgsRes.data.message;
+
+//       if (
+//         (preData.length !== 0 ) &&  (sameData.length !== 0) &&
+//         (preData[preData.length - 1].id === sameData[sameData.length - 1].id) 
+//       ) {
+//         console.log(
+
+//           preData[preData.length - 1].id - 1,
+//           sameData[sameData.length - 1].id,
+//           preData.length,
+//           sameData.length
+//         )
+//         let datalocal = JSON.parse(localStorage.getItem("data"));
+//         return showMsgs(datalocal);
+//       }
+//       let allLocalMsgs;
+
+//       if (preData.length === 0) {
+//         allLocalMsgs = LocalMsgsRes.data.message;
+//       } else {
+//         allLocalMsgs = [...preData, ...LocalMsgsRes.data.message];
+//         let uniqueIds = new Set();
+//         allLocalMsgs = allLocalMsgs.filter((item) => {
+//           if (!uniqueIds.has(item.id)) {
+//             uniqueIds.add(item.id);
+//             return true;
+//           }
+//           return false;
+//         });
+
+//         // console.log(allLocalMsgs);
+//       }
+
+//       if (allLocalMsgs.length > 10) {
+//         console.log(allLocalMsgs);
+//         const msgAfterSlice = allLocalMsgs.slice(
+//           allLocalMsgs.length - 10,
+//           allLocalMsgs.length
+//         );
+//         console.log(allLocalMsgs.length, "after slice");
+//         localStorage.setItem("data", JSON.stringify(msgAfterSlice));
+//       } else {
+//         localStorage.setItem("data", JSON.stringify(allLocalMsgs));
+//         // console.log("entered 2");
+//       }
+
+//       let datalocal = JSON.parse(localStorage.getItem("data"));
+//       //   console.log(datalocal)
+//       showMsgs(datalocal);
+//     } catch (err) {
+//       console.log(err, "happend in frontend");
+//     }
+//   }
+// }
 
 async function showMsgs(allMsgs) {
   try {
@@ -243,7 +275,6 @@ async function createGroup() {
 }
 
 function groupUI(data) {
-  console.log(data)
   data = data.message;
   const parentElement = document.getElementById("group-list");
   data.forEach((item) => {
@@ -285,7 +316,7 @@ async function linkClicked(id) {
 async function switchGroup(id) {
   try {
     console.log("Switching to group", id);
-    localStorage.removeItem("data")
+    localStorage.removeItem("messages")
       const groupId = localStorage.setItem("groupId",id)
       await location.reload()
   } catch (err) {

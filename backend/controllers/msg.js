@@ -27,8 +27,9 @@ exports.addMsg = async (req,res)=>{
 
 exports.getMsg = async(req,res)=>{
     try{
+        const groupId = req.params.id
         const allMsgs = await Msg.findAll(
-            {attributes: ['message'],
+            {where:{groupId:groupId},attributes: ['id','message'],
             include:[{model:User,attributes:['name']}]})
         return res.status(200).json({message:allMsgs})
     }
@@ -40,9 +41,10 @@ exports.getMsg = async(req,res)=>{
 
 exports.getMsgOnLimit = async(req,res)=>{
     try{
-        console.log('called called')
         const groupId = req.query.groupId
         const msgSkipNum = Number(req.query.id)
+        console.log(typeof(groupId))
+        console.log(typeof(msgSkipNum))
         console.log(msgSkipNum,'to skip')
         if(msgSkipNum >= 10){
             const skip = msgSkipNum-10
@@ -56,6 +58,7 @@ exports.getMsgOnLimit = async(req,res)=>{
         const allMsgs = await Msg.findAll(
             {where:{groupId:groupId},attributes: ['id','message'],
             include:[{model:User,attributes:['name']}]})
+        console.log(allMsgs.length,'length')
         return res.status(200).json({message:allMsgs})
     }
     catch(err){
