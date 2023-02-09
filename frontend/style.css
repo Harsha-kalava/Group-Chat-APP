@@ -207,6 +207,36 @@ body {
     cursor: pointer;
   }
   
+.search{
+  margin: 10px;
+  margin-top: 20px;
+  margin-left: 0rem;
+}
+
+.search input{
+  width: 100px;
+}
+  .user-container {
+    margin: 20px 0;
+  }
+  
+  .user-container h2 {
+    margin-bottom: 10px;
+  }
+  
+  .user-list {
+    list-style-type: none;
+    margin-left: 0rem;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .user-list li {
+    padding: 2px;
+    border-bottom: 1px solid gray;
+    margin-bottom: 2px;
+  }
+  
 
   /* .create-group-btn {
     display: block;

@@ -16,13 +16,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const userName = localStorage.getItem("username");
     userJoined(userName);
-    if(!getAllClicked){
-        setInterval(()=>{
-            getLocalMsgs()
+    // if(!getAllClicked){
+    //     setInterval(()=>{
+    //         getLocalMsgs()
 
-        },1000)
-    }
-    // getLocalMsgs()
+    //     },1000)
+    // }
+    getLocalMsgs()
     allGroups();
   } catch (err) {
     console.log(err);
@@ -283,7 +283,7 @@ function groupUI(data) {
     groupText.classList.add("group-text");
     groupText.id = `${item.id}`
     groupText.textContent = `${item.GroupName}`;
-    groupText.addEventListener("click", () => switchGroup(item.id));
+    groupText.addEventListener("click", () => switchGroup(item.id,item.GroupName));
     li.appendChild(groupText);
     
     let inviteLink = document.createElement("p");
@@ -298,6 +298,27 @@ function groupUI(data) {
   return;
 }
 
+async function addUserClicked(e){
+  e.preventDefault()
+  console.log('clicked on addUser function')
+  const groupId = localStorage.getItem('groupId')
+  const userName = document.getElementById('search').value
+  console.log(userName)
+  try {
+    alert('Are you sure to add this user to group ?')
+    const userCheckInGroupRes = await axios.get(`http://localhost:3000/group/toadduser?userEmail=${userName}&groupId=${groupId}`)
+    console.log(userCheckInGroupRes.status)
+    if(userCheckInGroupRes.status === 200){
+      alert('User is already a member in this group')
+    }else{
+      alert('User successfully added to this group')
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+}
+
 async function linkClicked(id) {
   try {
     console.log("clicked on the group link", id)
@@ -307,22 +328,32 @@ async function linkClicked(id) {
     if(userCheckInGroupRes.status === 200){
       alert('You are already a member in this group')
     }
-    alert('Successfully joined in this gorup')
+    else{
+      alert('Successfully joined in this gorup')
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+async function switchGroup(id, GroupName) {
+  try {
+    console.log("Switching to group", id, GroupName);
+    const groupName = document.getElementById("gorupNameHeader");
+    if (groupName) {
+      groupName.innerHTML = GroupName;
+    } else {
+      console.error("Element with id 'gorupNameHeader' not found in the DOM");
+    }
+    localStorage.removeItem("messages");
+    localStorage.setItem("groupId", id);
+    latestMessageId = 0;
+    await getLocalMsgs();
   } catch (err) {
     console.log(err);
   }
 }
 
-async function switchGroup(id) {
-  try {
-    console.log("Switching to group", id);
-    localStorage.removeItem("messages")
-      const groupId = localStorage.setItem("groupId",id)
-      await location.reload()
-  } catch (err) {
-    console.log(err);
-  }
-}
+
 
 
 async function allGroups() {

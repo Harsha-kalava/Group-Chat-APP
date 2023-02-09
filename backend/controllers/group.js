@@ -67,20 +67,51 @@ exports.groupCheckAndFetch = async(req,res)=>{
 exports.addUserToGroup = async (req,res)=>{
     try{
         const groupId = req.query.groupId
+        const email = req.query.userEmail
         const userId = req.user.id
-        console.log(groupId,userId)
+        console.log(groupId,userId,email)
+        if(email){
+            console.log('entered in email block')
+            const userId1 = await User.findOne({where:{email:email},attributes: ['id']})
+            console.log(userId1.id,'user id inside blockk')
+            const id = userId1.id
+            const result = await userCheck(groupId,id)
+            if(result == 'success'){
+                 return res.status(201).json({success:true,message:'user created'})
+            }else{
+                return res.status(200).json({success:true,message:'user exists'})
+            }
+        }
+        console.log('not entered in email block')
+        const result = await userCheck(groupId,userId)
+        if(result === 'success'){
+            return res.status(201).json({success:true,message:'user created'})
+       }else{
+           return res.status(200).json({success:true,message:'user exists'})
+       }
+    }
+    catch(err){
+        console.log(err)
+        return res.status(500).json({success:false,message:'failed at userCheck function'})
+    }
+}
+
+async function userCheck(groupId,userId){
+    try{
+        console.log('entered in user check')
         const userInGroupOrNot = await userGroup.findOne({where:{groupId:groupId,userId:userId}})
         if(!userInGroupOrNot){
             await userGroup.create({
                 userId:userId,
                 groupId:groupId
             })
-            return res.status(201).json({success:true,message:'user created'})
+            return 'success'
         }
-        
-        return res.status(200).json({success:true,message:'user already created'})
+        return true
     }
     catch(err){
         console.log(err)
+        return false
     }
+    
 }
