@@ -17,4 +17,6 @@ router.get('/togetAllusers',grpController.allMembersInGroup)
 
 router.put('/makeAdmin',authenticateMiddleware.authenticate,grpController.makeAdmin)
 
+router.delete('/deleteUser',authenticateMiddleware.authenticate,grpController.deleteUser)
+
 module.exports = router

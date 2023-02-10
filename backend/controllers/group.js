@@ -168,3 +168,24 @@ exports.makeAdmin = async(req,res)=>{
         console.log(err)
     }
 }
+
+exports.deleteUser = async(req,res)=>{
+    try{
+        const todeleteUserId = req.query.userId
+        const groupId = req.query.groupId
+        const userId = req.user.id
+        console.log(todeleteUserId,userId)
+        const userAdminOrNot = await userGroup.findOne({where:{groupId:groupId,userId:userId},attributes:['isAdmin']})
+        console.log(userAdminOrNot.isAdmin)
+        if(userAdminOrNot.isAdmin === false){
+            return res.status(401).json({success:true,message:'user is not an admin'})
+        }
+        await userGroup.destroy({
+            where: { groupId:groupId,userId:todeleteUserId },
+          })
+          return res.status(202).json({success:true,message:'updated successfully'})
+    }
+    catch(err){
+        console.log(err)
+    }
+}

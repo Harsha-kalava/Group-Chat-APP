@@ -455,6 +455,20 @@ async function adminButton(id){
 }
 
 async function deleteButton(id){
-  console.log('clicked on delete button',id)
+  try{
+    console.log('clicked on delete button',id)
+    const groupId = localStorage.getItem('groupId')
+    const deleteRes = await axios.delete(`http://localhost:3000/group/deleteUser?userId=${id}&groupId=${groupId}`)
+    console.log(deleteRes.status)
+    if(deleteRes.status === 202){
+      alert('user deleted successfully')
+    }
+  }
+  catch(err){
+    console.log(err.response.status,'hello')
+    if(err.response.status === 401){
+      alert('You are not allowed to delete user')
+    }}
+    
 }
 
