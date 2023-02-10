@@ -127,9 +127,6 @@ async function getLocalMsgs() {
 }
 
 
-
-
-
 // async function getLocalMsgs() {
 //   if (!getAllClicked) {
 //     try {
@@ -306,7 +303,7 @@ async function addUserClicked(e){
   console.log(userName)
   try {
     alert('Are you sure to add this user to group ?')
-    const userCheckInGroupRes = await axios.get(`http://localhost:3000/group/toadduser?userEmail=${userName}&groupId=${groupId}`)
+    const userCheckInGroupRes = await axios.get(`http://localhost:3000/group/toadduser?userEmail=${userName}&groupId=${groupId}&admin=false`)
     console.log(userCheckInGroupRes.status)
     if(userCheckInGroupRes.status === 200){
       alert('User is already a member in this group')
@@ -323,7 +320,7 @@ async function linkClicked(id) {
   try {
     console.log("clicked on the group link", id)
     alert('Are you sure to join in this group')
-    const userCheckInGroupRes = await axios.get(`http://localhost:3000/group/toadduser?groupId=${id}`)
+    const userCheckInGroupRes = await axios.get(`http://localhost:3000/group/toadduser?groupId=${id}&admin=false`)
     console.log(userCheckInGroupRes.status)
     if(userCheckInGroupRes.status === 200){
       alert('You are already a member in this group')
@@ -337,24 +334,25 @@ async function linkClicked(id) {
 }
 async function switchGroup(id, GroupName) {
   try {
-    console.log("Switching to group", id, GroupName);
+    console.log("Switching to group", id, GroupName)
+    let list = document.getElementById('userlist')
+    list.innerHTML = ''
     const groupName = document.getElementById("gorupNameHeader");
     if (groupName) {
-      groupName.innerHTML = GroupName;
+      groupName.innerHTML = GroupName
     } else {
       console.error("Element with id 'gorupNameHeader' not found in the DOM");
     }
-    localStorage.removeItem("messages");
-    localStorage.setItem("groupId", id);
-    latestMessageId = 0;
-    await getLocalMsgs();
+    localStorage.removeItem("messages")
+    localStorage.setItem("groupId", id)
+    latestMessageId = 0
+    let groupId = localStorage.getItem("groupId")
+    await getLocalMsgs()
+    await allGroupMembers(groupId)
   } catch (err) {
     console.log(err);
   }
 }
-
-
-
 
 async function allGroups() {
   try {
@@ -366,3 +364,97 @@ async function allGroups() {
     console.log(err);
   }
 }
+
+async function allGroupMembers(id){
+  try{
+    const allMembersRes = await axios.get(`http://localhost:3000/group/togetAllusers?groupId=${id}`)
+    let info = allMembersRes.data.members
+    // const admin = info.find(user => user.isAdmin === true)
+    console.log(info)
+    userUI(info)
+  }
+  catch(err){
+    console.log(err,'happend at allGroupMembers function')
+  }
+}
+
+async function userUI(data){
+  try{
+    
+    const loggedInUserName = localStorage.getItem('username')
+
+    // const userContainer = document.getElementById("user-container");
+    
+    data.forEach(user => {
+      const listItem = document.createElement("ul");
+      listItem.classList.add("user-list", "li");
+    
+      const span = document.createElement("span");
+      span.textContent = `${user.name}`;
+    
+      if (user.isAdmin === true && user.name === loggedInUserName) {
+        const p = document.createElement("span");
+        p.textContent = " - You are admin";
+    
+        listItem.appendChild(span);
+        listItem.appendChild(p);
+      }
+      else if(user.isAdmin === true && user.name !== loggedInUserName){
+        const p = document.createElement("span");
+        p.textContent = " - admin";
+    
+        listItem.appendChild(span);
+        listItem.appendChild(p);
+      }
+       else if (user.isAdmin === false) {
+        const makeAdminButton = document.createElement("button");
+        makeAdminButton.textContent = "Make Admin"
+        makeAdminButton.addEventListener('click', function() {
+          adminButton(user.userId);
+        });
+    
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "X";
+        removeButton.addEventListener('click', function() {
+          deleteButton(user.userId);
+        });
+        listItem.appendChild(span);
+        listItem.appendChild(makeAdminButton);
+        listItem.appendChild(removeButton);
+      } else {
+        listItem.appendChild(span);
+      }
+    
+      const userList = document.querySelector(".user-list");
+      userList.appendChild(listItem);
+    });
+    
+
+  } catch (err) {
+    console.log(err, 'happend at userUI function')
+  }
+}
+
+async function adminButton(id){
+  try{
+    const groupId = localStorage.getItem('groupId')
+    console.log('clicked on admin button',id)
+    const makeAdminRes = await axios.put(`http://localhost:3000/group/makeAdmin?userId=${id}&groupId=${groupId}`)
+    console.log(makeAdminRes.status)
+    if(makeAdminRes.status === 202){
+      alert('Admin added successfully')
+    }
+  }
+  catch(err){
+    console.log(err.response.status,'hello')
+    if(err.response.status === 401){
+      alert('You are not this group Admin to make this operation')
+    }
+  }
+
+}
+
+async function deleteButton(id){
+  console.log('clicked on delete button',id)
+}
+

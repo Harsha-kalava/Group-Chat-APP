@@ -9,7 +9,7 @@ exports.groupCreation = async(req,res)=>{
         console.log(data.groupName)
 
         const addCommonGroup = await Group.findOrCreate({
-            where: { GroupName: 'common' }   
+            where: { GroupName: 'common',isAdmin:false }   
         }).then((result) => {
             return result;
           })
@@ -17,10 +17,22 @@ exports.groupCreation = async(req,res)=>{
 
         const groupTable = await Group.create({
             GroupName:data.groupName,
-            userId:userId
+            userId:userId,
+            isAdmin:true
         })
 
-        await req.user.addGroup(groupTable)
+        const groupId = groupTable.id;
+        let isAdmin = groupTable.isAdmin
+        console.log(isAdmin,'<----------- is admin')
+        if(isAdmin === null){
+            isAdmin = false
+        }
+
+        await userGroup.create({
+        userId: userId,
+        groupId: groupId,
+        isAdmin: isAdmin
+        });
 
         return res.status(201).json({success:true,message:groupTable})
     }
@@ -51,6 +63,24 @@ exports.allGroups = async(req,res)=>{
     }
 }
 
+exports.allMembersInGroup = async (req, res) => {
+    try {
+        const groupId = req.query.groupId
+        console.log(groupId)
+        const groupMembersId = await userGroup.findAll({ where: { groupId: groupId }, attributes: ['userId', 'isAdmin'] })
+
+        const members = await Promise.all(groupMembersId.map(async data => {
+            const membersName = await User.findAll({ where: { id: data.userId }, attributes: ['name'] })
+            for (let user of membersName) {
+                return { userId: data.userId, isAdmin: data.isAdmin, name: user.name }
+            }
+        }))
+        return res.status(200).json({ success: true, members: members })
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({ success: false, message: 'unable to retrieve group members' })
+    }
+}
 
 exports.groupCheckAndFetch = async(req,res)=>{
     try{
@@ -68,6 +98,7 @@ exports.addUserToGroup = async (req,res)=>{
     try{
         const groupId = req.query.groupId
         const email = req.query.userEmail
+        const isAdmin = req.query.admin
         const userId = req.user.id
         console.log(groupId,userId,email)
         if(email){
@@ -75,7 +106,7 @@ exports.addUserToGroup = async (req,res)=>{
             const userId1 = await User.findOne({where:{email:email},attributes: ['id']})
             console.log(userId1.id,'user id inside blockk')
             const id = userId1.id
-            const result = await userCheck(groupId,id)
+            const result = await userCheck(groupId,id,isAdmin)
             if(result == 'success'){
                  return res.status(201).json({success:true,message:'user created'})
             }else{
@@ -83,7 +114,7 @@ exports.addUserToGroup = async (req,res)=>{
             }
         }
         console.log('not entered in email block')
-        const result = await userCheck(groupId,userId)
+        const result = await userCheck(groupId,userId,isAdmin)
         if(result === 'success'){
             return res.status(201).json({success:true,message:'user created'})
        }else{
@@ -96,14 +127,15 @@ exports.addUserToGroup = async (req,res)=>{
     }
 }
 
-async function userCheck(groupId,userId){
+async function userCheck(groupId,userId,isAdmin){
     try{
         console.log('entered in user check')
         const userInGroupOrNot = await userGroup.findOne({where:{groupId:groupId,userId:userId}})
         if(!userInGroupOrNot){
             await userGroup.create({
                 userId:userId,
-                groupId:groupId
+                groupId:groupId,
+                isAdmin:isAdmin
             })
             return 'success'
         }
@@ -114,4 +146,25 @@ async function userCheck(groupId,userId){
         return false
     }
     
+}
+
+exports.makeAdmin = async(req,res)=>{
+    try{
+        const toMakeAdminId = req.query.userId
+        const groupId = req.query.groupId
+        const userId = req.user.id
+        console.log(toMakeAdminId,userId)
+        const userAdminOrNot = await userGroup.findOne({where:{groupId:groupId,userId:userId},attributes:['isAdmin']})
+        console.log(userAdminOrNot.isAdmin)
+        if(userAdminOrNot.isAdmin === false){
+            return res.status(401).json({success:true,message:'user is not an admin'})
+        }
+        await userGroup.update({isAdmin:true},{
+            where: { groupId:groupId,userId:toMakeAdminId },
+          })
+          return res.status(202).json({success:true,message:'updated successfully'})
+    }
+    catch(err){
+        console.log(err)
+    }
 }

@@ -14,6 +14,10 @@ const GroupData = sequelize.define('group',{
         type:Sequelize.STRING,
         allowNull:false,
     },
+    isAdmin:{
+        type:Sequelize.BOOLEAN,
+        allowNull:false
+    }
 })
 
 
